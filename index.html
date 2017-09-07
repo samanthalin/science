@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Science VR</title>
+    <script src="script/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-randomizer-components@^3.0.1/dist/aframe-randomizer-components.min.js"></script>
+    <script src="https://unpkg.com/aframe-entity-generator-component@^3.0.0/dist/aframe-entity-generator-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-animation-component@^3.2.0/dist/aframe-animation-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@^3.0.0/dist/aframe-event-set-component.min.js"></script>
+  </head>
+  <body>
+    <script>
+    var getScore=[]
+      AFRAME.registerComponent('stage2', {
+        init: function () {
+          // Solution for Creating Entities.
+          var sceneEl = document.querySelector('a-scene'); 
+          
+          for (var i = 1; i < 51; i++) {
+            
+            var boxEl = document.createElement('a-box');
+            boxEl.setAttribute('material', {color: '#EF2D5E', opacity: '0'});
+            boxEl.setAttribute('position', {x: Math.random() * 20 - 10, y: Math.random() * 20 - 5, z: Math.random() * 20 - 10});
+            boxEl.setAttribute('rotation', {x: Math.random() * 100, y: Math.random() * 100, z: Math.random() * 100});
+            boxEl.setAttribute('boxid',i)
+            var model = document.createElement('a-collada-model');
+            model.setAttribute('src', '../science/H2O.dae');
+            model.setAttribute('scale', {x: 2, y: 2, z: 2});
+            model.setAttribute('event-set__1', {_event: 'mouseenter', scale: '3 3 3'});
+            model.setAttribute('event-set__2', {_event: 'mouseleave', scale: '2 2 2'});
+            model.setAttribute('event-set__3', {_event: 'click', visible: 'false'});
+            model.setAttribute('animation', {property: 'rotation', to: '360 360 360', loop: 'true', dur: 6000, easing: 'linear'});
+            model.setAttribute('animation__2', {property: 'position', to: {x: Math.random() * 5, y: Math.random() * 5, z: Math.random() * 5}, dir: 'alternate', dur: Math.random() * 10000, easing: 'linear', loop: 'true'});
+
+            
+            boxEl.appendChild(model);
+
+            sceneEl.appendChild(boxEl);
+            //console.log(boxEl);
+            boxEl.addEventListener('click', function(){
+              var a = this.getAttribute("boxid")
+              printScore(a)
+              //console.log(a)
+            })
+
+          }
+        }
+      });
+      function printScore(currentboxid){
+        var currentScore = 0;
+      getScore.push({boxid:currentboxid})
+
+      if (getScore.length == 10 ){
+       console.log('Congratulation')
+      }
+      console.log(getScore.length)
+      }
+    </script>
+
+    <a-scene stage2>
+      <a-assets>
+        <a-asset-item id="H2O" src="H2O.dae"></a-asset-item>
+      </a-assets>
+      
+      <a-sky src="bg.jpg"></a-sky>
+      
+
+      <a-camera camera="userHeight: 1.6" look-controls> 
+        <a-cursor >
+          <!-- <a-plane scale="1 0.5 1" color="green" position="0 0.3 0"></a-plane>
+          <a-plane scale="2.357 0.2 1" color="yellow" position="0 -0.817 -0.321"></a-plane> -->
+        </a-cursor>
+        
+      </a-camera>
+    </a-scene>
+  </body>
+</html>
